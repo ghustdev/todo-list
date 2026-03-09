@@ -1,30 +1,9 @@
 package view;
 
-import model.Task;
-import model.TaskStatus;
 import services.TaskService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Scanner;
-
-public class Cli {
-	Scanner scanner = new Scanner(System.in);
-	
-	public void cliMainMenu() {
-		CliMenuAction.cliManu(this);
-	}
-	
-	public void cliAddTask() {
-		CliAddTaskAction.cliAddTask(this);
-	}
-	
-	public void cliListAllTasks() {
-		CliListAllTasksAction.cliListAllTasks(this);
-	}
-	
-	public void cliDeleteTask() {
+public class CliDeleteTaskAction {
+	static void cliDeleteTask(Cli cli) {
 		try {
 			TaskService taskService = new TaskService();
 			
@@ -32,8 +11,8 @@ public class Cli {
 			System.out.println("|                Deletar Tarefa                  |");
 			System.out.println("+================================================+");
 			System.out.print("Insira o ID para deletar: ");
-			int id = scanner.nextInt();
-			scanner.nextLine();
+			int id = cli.scanner.nextInt();
+			cli.scanner.nextLine();
 			
 			boolean removedId = taskService.deleteTask(id);
 			
@@ -47,19 +26,13 @@ public class Cli {
 			}
 			
 			System.out.println("+================================================+");
-			System.out.println("Aperte \"Enter\" para continuar");
-			scanner.nextLine();
+			cli.pause();
 		}
 		catch (Exception e) {
 			System.out.println("+================================================+");
 			System.out.println("Erro: Algum erro em deletar tarefa (Deletar Tarefa)");
 			System.out.println("+================================================+");
-			System.out.println("Aperte \"Enter\" para continuar");
+			cli.pause();
 		}
-	}
-	
-	public void pause() {
-		System.out.println("Aperte \"Enter\" para continuar");
-		scanner.nextLine();
 	}
 }
