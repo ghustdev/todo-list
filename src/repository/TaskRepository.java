@@ -31,10 +31,7 @@ public class TaskRepository {
 			}
 		}
 		catch (IOException e) {
-			System.out.println("+================================================+");
-			System.out.println("Erro ao salvar dados no arquivo - " + e.getMessage());
-			System.out.println("+================================================+");
-			System.out.println("Aperte \"Enter\" para continuar");
+			e.printStackTrace();
 		}
 	}
 	

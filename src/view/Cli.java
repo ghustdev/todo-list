@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
-public class Interface {
+public class Cli {
 	Scanner scanner = new Scanner(System.in);
 	
 	public void cliMainMenu() {
