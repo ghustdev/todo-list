@@ -13,10 +13,11 @@ public class CliMenuAction {
 				System.out.println("[4] - Listar Tarefas por Categoria");
 				System.out.println("[5] - Listar Tarefas por Prioridade");
 				System.out.println("[6] - Listar Tarefas por Status");
-				System.out.println("[7] - Filtro Tarefas por data");
+				System.out.println("[7] - Filtrar Tarefas por Data");
+				System.out.println("[8] - Atualizar Tarefa");
 				System.out.println("[0] - Encerrar programa");
-				System.out.println("\nSelecione uma ação:");
 				System.out.println("+================================================+");
+				System.out.print("Selecione uma ação: ");
 				
 				int optionMenu = cli.scanner.nextInt();
 				cli.scanner.nextLine();
@@ -40,7 +41,10 @@ public class CliMenuAction {
 					cli.cliListPerStatus();
 				}
 				else if (optionMenu == 7) {
-					cli.cliFilterPerData();
+					cli.cliFilterPerDate();
+				}
+				else if (optionMenu == 8) {
+					cli.cliUpdateTask();
 				}
 				else if (optionMenu == 0) {
 					cli.scanner.close();
@@ -50,15 +54,14 @@ public class CliMenuAction {
 					System.out.println("+================================================+");
 					System.out.println("Erro: Insira uma opção válida");
 					System.out.println("+================================================+");
-					System.out.println("Aperte \"Enter\" para continuar");
-					cli.scanner.nextLine();
+					cli.pause();
 				}
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				System.out.println("+================================================+");
-				System.out.println("Erro: Adicione a entrada correta (números de 0 - 6)");
+				System.out.println("Erro: Adicione a entrada correta (números de 0 - 8)");
 				System.out.println("+================================================+");
-				System.out.println("Aperte \"Enter\" para continuar");
-				cli.scanner.nextLine();
+				cli.pause();
 			}
 		}
 	}

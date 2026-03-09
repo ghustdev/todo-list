@@ -5,19 +5,21 @@ import services.TaskService;
 
 import java.util.List;
 
-public class CliListAllTasksAction {
-	static void cliListAllTasks(Cli cli) {
+public class CliListPerCategoryAction {
+	static void cliListPerCategory(Cli cli) {
 		try {
 			TaskService taskService = new TaskService();
 			
 			System.out.println("+================================================+");
-			System.out.println("|                Listar Tarefas                  |");
+			System.out.println("|          Listar Tarefas por Categoria          |");
 			System.out.println("+================================================+");
+			System.out.print("Insira a categoria: ");
+			String category = cli.scanner.nextLine();
 			
-			List<Task> tasks = taskService.listTasks();
+			List<Task> tasks = taskService.listTasksPerCategory(category);
 			
 			if (tasks == null || tasks.isEmpty()) {
-				System.out.println("Nenhuma tarefa cadastrada");
+				System.out.println("Nenhuma tarefa encontrada para essa categoria");
 				System.out.println("+================================================+");
 				cli.pause();
 				return;
@@ -36,7 +38,7 @@ public class CliListAllTasksAction {
 		}
 		catch (Exception e) {
 			System.out.println("+================================================+");
-			System.out.println("Erro: Algum erro em listar tarefas (Listar Tarefas)");
+			System.out.println("Erro: Algum erro em listar tarefas por categoria");
 			System.out.println("+================================================+");
 			cli.pause();
 		}

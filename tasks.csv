@@ -1,5 +1,25 @@
-2;Estudar Groovy;Fazer isso hoje;14/02/2026;1;Estudo;TODO
-3;Teste;Teste;15/02/2026;1;Teste;DOING
-4;Teste;Teste2;16/02/2026;2;Teste2;DONE
-5;Teste3;Teste3;17/02/2026;5;Teste3;DOING
-6;Teste4;test4;14/02/2026;5;Teste4;TODO
+1;Planejar sprint 12;Definir escopo da sprint com o time;12/03/2026;4;Trabalho;TODO
+2;Revisar PR pagamento;Validar regras de desconto no checkout;12/03/2026;5;Trabalho;DOING
+3;Estudar Java Streams;Praticar filter map e reduce;14/03/2026;3;Estudos;TODO
+4;Treino corrida;Corrida leve de 5km no parque;10/03/2026;2;Saude;DONE
+5;Comprar mantimentos;Comprar frutas legumes e itens de limpeza;11/03/2026;3;Pessoal;TODO
+6;Marcar consulta dentista;Ligar para a clinica e confirmar horario;15/03/2026;4;Saude;DOING
+7;Organizar escritorio;Separar documentos e limpar mesa;16/03/2026;2;Casa;TODO
+8;Atualizar curriculo;Ajustar experiencias recentes e tecnologias;18/03/2026;3;Carreira;DOING
+9;Enviar relatorio mensal;Consolidar metricas e enviar ao gestor;20/03/2026;5;Trabalho;TODO
+10;Pagar fatura cartao;Efetuar pagamento no app do banco;10/03/2026;5;Financeiro;DONE
+11;Estudar SQL;Praticar joins e subqueries;14/03/2026;4;Estudos;DOING
+12;Planejar viagem feriado;Pesquisar hospedagem e roteiro;22/03/2026;2;Pessoal;TODO
+13;Reuniao 1:1;Alinhar metas trimestrais;13/03/2026;4;Trabalho;DONE
+14;Ler capitulo Clean Code;Focar em funcoes pequenas e nomes claros;17/03/2026;3;Estudos;TODO
+15;Trocar lampada cozinha;Comprar lampada led e instalar;11/03/2026;1;Casa;DONE
+16;Atualizar documentacao API;Adicionar exemplos de request e response;19/03/2026;4;Trabalho;DOING
+17;Backup notebook;Executar backup completo em nuvem;21/03/2026;3;Tecnologia;TODO
+18;Configurar autenticacao 2FA;Habilitar 2FA nos servicos principais;21/03/2026;5;Tecnologia;DOING
+19;Agendar revisao carro;Marcar revisao de 20000 km;25/03/2026;3;Pessoal;TODO
+20;Fechar task bug login;Corrigir validacao de token expirado;12/03/2026;5;Trabalho;DONE
+21;Praticar ingles;Assistir aula e fazer exercicios;15/03/2026;2;Estudos;TODO
+22;Separar roupas doacao;Organizar caixas para doacao;23/03/2026;1;Casa;DOING
+23;Revisar metas financeiras;Ajustar planilha de gastos mensais;24/03/2026;4;Financeiro;TODO
+24;Consulta de rotina;Check-up clinico anual;26/03/2026;3;Saude;TODO
+25;Preparar apresentacao demo;Montar slides da entrega da sprint;20/03/2026;5;Trabalho;DOING

@@ -60,19 +60,13 @@ public class TaskRepository {
 				
 				Task task = new Task(id, name, description, dateFinished, priorityLevel, category, status);
 				tasks.add(task);
+				
 			}
+			
+			return tasks;
 		}
 		catch (IOException e) {
-			System.out.println("+================================================+");
-			System.out.println("Erro ao ler dados no arquivo - " + e.getMessage());
-			System.out.println("+================================================+");
-			System.out.println("Aperte \"Enter\" para continuar");
-		}
-		catch (NumberFormatException e) {
-			System.out.println("+================================================+");
-			System.out.println("Erro ao processar dados no arquivo - " + e.getMessage());
-			System.out.println("+================================================+");
-			System.out.println("Aperte \"Enter\" para continuar");
+			e.printStackTrace();
 		}
 		
 		return tasks;

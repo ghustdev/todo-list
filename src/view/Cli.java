@@ -1,12 +1,5 @@
 package view;
 
-import model.Task;
-import model.TaskStatus;
-import services.TaskService;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Scanner;
 
 public class Cli {
@@ -20,42 +13,32 @@ public class Cli {
 		CliAddTaskAction.cliAddTask(this);
 	}
 	
+	public void cliUpdateTask() {
+		CliUpdateTaskAction.cliUpdateTask(this);
+	}
+	
 	public void cliListAllTasks() {
 		CliListAllTasksAction.cliListAllTasks(this);
 	}
 	
+	public void cliListPerCategory() {
+		CliListPerCategoryAction.cliListPerCategory(this);
+	}
+	
+	public void cliListPerPriority() {
+		CliListPerPriorityAction.cliListPerPriority(this);
+	}
+	
+	public void cliListPerStatus() {
+		CliListPerStatusAction.cliListPerStatus(this);
+	}
+	
+	public void cliFilterPerDate() {
+		CliFilterPerDateAction.cliFilterPerDate(this);
+	}
+	
 	public void cliDeleteTask() {
-		try {
-			TaskService taskService = new TaskService();
-			
-			System.out.println("+================================================+");
-			System.out.println("|                Deletar Tarefa                  |");
-			System.out.println("+================================================+");
-			System.out.print("Insira o ID para deletar: ");
-			int id = scanner.nextInt();
-			scanner.nextLine();
-			
-			boolean removedId = taskService.deleteTask(id);
-			
-			if (removedId) {
-				System.out.println("+================================================+");
-				System.out.println("Terafa excluída com sucesso!");
-			}
-			else {
-				System.out.println("+================================================+");
-				System.out.println("Erro: ID inexistente!");
-			}
-			
-			System.out.println("+================================================+");
-			System.out.println("Aperte \"Enter\" para continuar");
-			scanner.nextLine();
-		}
-		catch (Exception e) {
-			System.out.println("+================================================+");
-			System.out.println("Erro: Algum erro em deletar tarefa (Deletar Tarefa)");
-			System.out.println("+================================================+");
-			System.out.println("Aperte \"Enter\" para continuar");
-		}
+		CliDeleteTaskAction.cliDeleteTask(this);
 	}
 	
 	public void pause() {
