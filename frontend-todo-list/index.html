@@ -3,10 +3,266 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
     <title>Todo List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   </head>
   <body>
-    <div id="app"></div>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img class="sidebar-favicon" src="/favicon.ico" alt="">
+        <span class="sidebar-logo">Todo List</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="sidebar-item" data-tab="home">
+          <i class="fa-solid fa-house sidebar-icon"></i>
+          <span>Home</span>
+        </button>
+        <button class="sidebar-item" data-tab="today">
+          <i class="fa-solid fa-calendar-day sidebar-icon"></i>
+          <span>Today</span>
+        </button>
+        <button class="sidebar-item" data-tab="profile">
+          <i class="fa-solid fa-user sidebar-icon"></i>
+          <span>Perfil</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Home View -->
+      <div id="homeView" class="view" style="display: none;">
+        <div class="page-header">
+          <h1 class="page-title">Todas as Tarefas</h1>
+        </div>
+        <div class="toolbar">
+          <input type="date" class="toolbar-btn" id="dateFilterInput" />
+          <button class="toolbar-btn" id="clearFilter" style="display: none;">
+            <i class="fa-solid fa-xmark"></i> Limpar
+          </button>
+        </div>
+        <div id="homeTaskList"></div>
+      </div>
+
+      <!-- Today View -->
+      <div id="todayView" class="view" style="display: none;">
+        <div class="page-header">
+          <h1 class="page-title">Hoje</h1>
+          <p class="page-subtitle" id="todayDate"></p>
+        </div>
+        <div id="todayTaskList"></div>
+      </div>
+
+      <!-- Profile View -->
+      <div id="profileView" class="view" style="display: none;">
+        <div class="page-header">
+          <h1 class="page-title">Perfil</h1>
+        </div>
+        <div class="profile-header">
+          <div class="avatar" id="avatarLetter"></div>
+          <input type="text" class="profile-name" id="userName" />
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Em construção...</div>
+          </div>
+
+          <!-- Future implementation -->
+          
+          <!-- <div class="stat-card">
+            <div class="stat-value" id="statTotal">0</div>
+            <div class="stat-label">Total de Tarefas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statCompletedToday">0</div>
+            <div class="stat-label">Concluídas Hoje</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statPending">0</div>
+            <div class="stat-label">Pendentes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statCategories">0</div>
+            <div class="stat-label">Categorias</div>
+          </div> -->
+        </div>
+        <!-- <div class="category-list" id="categoryList" style="display: none;">
+          <div class="task-group-title">Por Categoria</div>
+          <div id="categoryItems"></div>
+        </div> -->
+      </div>
+    </main>
+
+    <!-- Fab - Add Task -->
+    <button class="fab" id="fab">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="bottom-nav">
+      <button class="nav-item" data-tab="home">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" data-tab="today">
+        <i class="fa-solid fa-calendar-day"></i>
+        <span>Today</span>
+      </button>
+      <button class="nav-item" data-tab="profile">
+        <i class="fa-solid fa-user"></i>
+        <span>Perfil</span>
+      </button>
+    </nav>
+
+    <!-- Task Modal -->
+    <modal class="modal-overlay" id="taskModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title" id="taskModalTitle">Nova Tarefa</h2>
+          <button class="close-btn" id="closeTaskModal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="taskForm">
+            <div class="form-group">
+              <label class="form-label">Título *</label>
+              <input type="text" class="form-input" id="taskTitle" required placeholder="Digite o título da tarefa" />
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Descrição</label>
+              <textarea class="form-textarea" id="taskDescription" placeholder="Adicione uma descrição..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <div class="toggle-group" id="statusGroup">
+                <button type="button" class="toggle-btn active" data-status="TODO">
+                  <i class="fa-regular fa-circle"></i> TODO
+                </button>
+                <button type="button" class="toggle-btn" data-status="DOING">
+                  <i class="fa-solid fa-spinner"></i> DOING
+                </button>
+                <button type="button" class="toggle-btn" data-status="DONE">
+                  <i class="fa-solid fa-check"></i> DONE
+                </button>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Data *</label>
+                <input type="date" class="form-input" id="taskDate" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hora *</label>
+                <input type="time" class="form-input" id="taskTime" required />
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Categoria</label>
+              <select class="form-select" id="taskCategory" required>
+                <option value="Trabalho"><i class="fa-solid fa-briefcase"></i> Trabalho</option>
+                <option value="Pessoal"><i class="fa-solid fa-user"></i> Pessoal</option>
+                <option value="Saúde"><i class="fa-solid fa-heart-pulse"></i> Saúde</option>
+                <option value="Estudos"><i class="fa-solid fa-book"></i> Estudos</option>
+                <option value="Outros"><i class="fa-solid fa-ellipsis"></i> Treino</option>
+                <option value="Outros"><i class="fa-solid fa-ellipsis"></i> Lazer</option>
+                <option value="Outros"><i class="fa-solid fa-ellipsis"></i> Projeto</option>
+                <option value="Outros"><i class="fa-solid fa-ellipsis"></i> Dia a Dia</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Prioridade</label>
+              <div class="toggle-group" id="priorityGroup">
+                <button type="button" class="toggle-btn" data-priority="1">1</button>
+                <button type="button" class="toggle-btn" data-priority="2">2</button>
+                <button type="button" class="toggle-btn active" data-priority="3">3</button>
+                <button type="button" class="toggle-btn" data-priority="4">4</button>
+                <button type="button" class="toggle-btn" data-priority="5">5</button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Notificação</label>
+              <div class="switch-wrapper">
+                <div class="switch" id="taskAlert"></div>
+                <span>Ativar alerta no horário</span>
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" id="taskSubmitBtn">
+              Criar Tarefa
+            </button>
+          </form>
+        </div>
+      </div>
+    </modal>
+
+    <!-- Detail Modal - View Detail Task -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title">Detalhes da Tarefa</h2>
+          <button class="close-btn" id="closeDetailModal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="detail-content">
+          <div class="detail-field">
+            <div class="detail-label">Título</div>
+            <div class="detail-value" id="detailTitle"></div>
+          </div>
+          
+          <div class="detail-field">
+            <div class="detail-label">Descrição</div>
+            <div class="detail-value" id="detailDescription"></div>
+          </div>
+          
+          <div class="detail-field">
+            <div class="detail-label">Status</div>
+            <div class="detail-value" id="detailStatus"></div>
+          </div>
+          
+          <div class="detail-field">
+            <div class="detail-label">Data e Hora</div>
+            <div class="detail-value" id="detailDateTime"></div>
+          </div>
+          
+          <div class="detail-field">
+            <div class="detail-label">Categoria</div>
+            <div class="detail-value" id="detailCategory"></div>
+          </div>
+          
+          <div class="detail-field">
+            <div class="detail-label">Prioridade</div>
+            <div class="detail-value" id="detailPriority"></div>
+          </div>
+          
+          <div class="detail-field">
+            <div class="detail-label">Alerta</div>
+            <div class="detail-value" id="detailAlert"></div>
+          </div>
+          
+          <div class="modal-actions">
+            <button class="btn btn-secondary" id="editTaskBtn">
+              <i class="fa-solid fa-pen"></i> Editar
+            </button>
+            <button class="btn btn-danger" id="deleteTaskBtn">
+              <i class="fa-solid fa-trash"></i> Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

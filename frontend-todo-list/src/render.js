@@ -1,66 +1,37 @@
 import { state } from './state.js'
 import { openTaskModal, openDetailModal } from './modal.js'
-
-const icons = {
-  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
-  today: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-  profile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>'
-}
-
-function renderDesktopHeader() {
-  return `
-    <header class="app-header">
-      <div class="app-header-content">
-        <div class="app-logo">
-          <div class="app-logo-icon">${icons.check}</div>
-          <div class="app-logo-text">
-            <h1>Todo List</h1>
-            <p>Organize suas tarefas</p>
-          </div>
-        </div>
-        <nav class="app-header-nav">
-          <button class="header-nav-btn ${state.currentTab === 'home' ? 'active' : ''}" data-tab="home">
-            <div class="header-nav-icon">${icons.home}</div>
-            <span>Home</span>
-          </button>
-          <button class="header-nav-btn ${state.currentTab === 'today' ? 'active' : ''}" data-tab="today">
-            <div class="header-nav-icon">${icons.today}</div>
-            <span>Today</span>
-          </button>
-          <button class="header-nav-btn ${state.currentTab === 'profile' ? 'active' : ''}" data-tab="profile">
-            <div class="header-nav-icon">${icons.profile}</div>
-            <span>Perfil</span>
-          </button>
-        </nav>
-      </div>
-    </header>
-  `
-}
+import { setUserName } from './state.js'
 
 export function render() {
-  const app = document.getElementById('app')
-  
-  let content = ''
+  updateNavigation()
   
   if (state.currentTab === 'home') {
-    content = renderHome()
+    showView('homeView')
+    renderHome()
   } else if (state.currentTab === 'today') {
-    content = renderToday()
+    showView('todayView')
+    renderToday()
   } else if (state.currentTab === 'profile') {
-    content = renderProfile()
+    showView('profileView')
+    renderProfile()
   }
   
-  app.innerHTML = `
-    ${renderDesktopHeader()}
-    <div class="content-wrapper">
-      ${content}
-    </div>
-    ${renderBottomNav()}
-    ${renderFAB()}
-  `
-  
   attachEventListeners()
+}
+
+function showView(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.style.display = 'none')
+  document.getElementById(viewId).style.display = 'block'
+}
+
+function updateNavigation() {
+  document.querySelectorAll('.nav-item, .sidebar-item').forEach(item => {
+    if (item.dataset.tab === state.currentTab) {
+      item.classList.add('active')
+    } else {
+      item.classList.remove('active')
+    }
+  })
 }
 
 function renderHome() {
@@ -68,20 +39,13 @@ function renderHome() {
   
   if (state.dateFilter) {
     tasks = tasks.filter(t => t.date === state.dateFilter)
+    document.getElementById('clearFilter').style.display = 'inline-flex'
+  } else {
+    document.getElementById('clearFilter').style.display = 'none'
   }
   
-  return `
-    <div class="header">
-      <h1>Todas as Tarefas</h1>
-    </div>
-    
-    <div class="date-filter">
-      <input type="date" id="dateFilterInput" value="${state.dateFilter || ''}" />
-      ${state.dateFilter ? '<button class="clear-filter" id="clearFilter">✕</button>' : ''}
-    </div>
-    
-    ${renderTaskList(tasks)}
-  `
+  document.getElementById('dateFilterInput').value = state.dateFilter || ''
+  renderTaskList(tasks, 'homeTaskList')
 }
 
 function renderToday() {
@@ -94,14 +58,8 @@ function renderToday() {
     month: 'long' 
   })
   
-  return `
-    <div class="header">
-      <h1>Hoje</h1>
-      <div class="date-subtitle">${dateStr}</div>
-    </div>
-    
-    ${renderTaskList(tasks, true)}
-  `
+  document.getElementById('todayDate').textContent = dateStr
+  renderTaskList(tasks, 'todayTaskList', true)
 }
 
 function renderProfile() {
@@ -110,179 +68,130 @@ function renderProfile() {
   const completedToday = state.tasks.filter(t => t.date === today && t.status === 'DONE').length
   const pending = state.tasks.filter(t => t.status !== 'DONE').length
   
+  document.getElementById('avatarLetter').textContent = state.userName.charAt(0).toUpperCase()
+  document.getElementById('userName').value = state.userName
+  document.getElementById('statTotal').textContent = total
+  document.getElementById('statCompletedToday').textContent = completedToday
+  document.getElementById('statPending').textContent = pending
+  
   const categories = {}
   state.tasks.forEach(t => {
     categories[t.category] = (categories[t.category] || 0) + 1
   })
   
-  return `
-    <div class="header">
-      <h1>Perfil</h1>
-    </div>
-    
-    <div class="profile-header">
-      <div class="avatar">${state.userName.charAt(0).toUpperCase()}</div>
-      <input 
-        type="text" 
-        class="profile-name" 
-        id="userName" 
-        value="${state.userName}"
-      />
-    </div>
-    
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value">${total}</div>
-        <div class="stat-label">Total</div>
+  document.getElementById('statCategories').textContent = Object.keys(categories).length
+  
+  const categoryList = document.getElementById('categoryList')
+  const categoryItems = document.getElementById('categoryItems')
+  
+  if (Object.keys(categories).length > 0) {
+    categoryList.style.display = 'block'
+    categoryItems.innerHTML = Object.entries(categories).map(([cat, count]) => `
+      <div class="category-item">
+        <span><i class="fa-solid fa-tag"></i> ${cat}</span>
+        <span>${count}</span>
       </div>
-      <div class="stat-card">
-        <div class="stat-value">${completedToday}</div>
-        <div class="stat-label">Concluídas Hoje</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${pending}</div>
-        <div class="stat-label">Pendentes</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${Object.keys(categories).length}</div>
-        <div class="stat-label">Categorias</div>
-      </div>
-    </div>
-    
-    <div class="category-list">
-      <div class="section-title">Por Categoria</div>
-      ${Object.entries(categories).map(([cat, count]) => `
-        <div class="category-item">
-          <span>${cat}</span>
-          <span>${count}</span>
-        </div>
-      `).join('')}
-    </div>
-  `
+    `).join('')
+  } else {
+    categoryList.style.display = 'none'
+  }
 }
 
-function renderTaskList(tasks, isToday = false) {
+function renderTaskList(tasks, containerId, isToday = false) {
+  const container = document.getElementById(containerId)
+  
   if (tasks.length === 0) {
-    return `
+    container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">✓</div>
-        <p>${isToday ? 'Nenhuma tarefa para hoje' : 'Nenhuma tarefa encontrada'}</p>
+        <div class="empty-icon"><i class="fa-regular fa-circle-check"></i></div>
+        <p class="empty-text">${isToday ? 'Nenhuma tarefa para hoje' : 'Nenhuma tarefa encontrada'}</p>
       </div>
     `
+    return
   }
   
   const pending = tasks.filter(t => t.status !== 'DONE').sort((a, b) => b.priority - a.priority)
   const completed = tasks.filter(t => t.status === 'DONE')
   
-  let html = ''
+  let html = '<div class="task-list">'
   
   if (pending.length > 0) {
-    html += '<div class="tasks-section">'
-    html += '<div class="section-title">Pendentes</div>'
-    html += pending.map(renderTaskCard).join('')
+    html += '<div class="task-group"><div class="task-group-title">Pendentes</div>'
+    pending.forEach(task => {
+      html += createTaskRow(task)
+    })
     html += '</div>'
   }
   
   if (completed.length > 0) {
-    html += '<div class="tasks-section">'
-    html += '<div class="section-title">Concluídas</div>'
-    html += completed.map(renderTaskCard).join('')
+    html += '<div class="task-group"><div class="task-group-title">Concluídas</div>'
+    completed.forEach(task => {
+      html += createTaskRow(task)
+    })
     html += '</div>'
   }
   
-  return html
+  html += '</div>'
+  container.innerHTML = html
 }
 
-function renderTaskCard(task) {
+function createTaskRow(task) {
+  const date = new Date(task.date + 'T00:00:00')
+  const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+  
   return `
-    <div class="task-card ${task.status === 'DONE' ? 'done' : ''}" data-id="${task.id}">
-      <div class="task-header">
-        <div class="task-title">${task.title}</div>
-        <div class="priority-badge ${task.priority >= 4 ? 'high' : ''}">${task.priority}</div>
+    <div class="task-row ${task.status === 'DONE' ? 'done' : ''}" data-id="${task.id}">
+      <div class="task-checkbox">
+        ${task.status === 'DONE' ? '<i class="fa-solid fa-check"></i>' : ''}
       </div>
-      <div class="task-meta">
-        <span class="status-badge ${task.status.toLowerCase()}">${task.status}</span>
-        <span class="task-time">📅 ${formatDate(task.date)} ${task.time}</span>
-        <span class="task-category">🏷️ ${task.category}</span>
+      <div class="task-content">
+        <span class="task-title-text">${task.title}</span>
+        <span class="task-badge badge-status ${task.status.toLowerCase()}">${task.status}</span>
+        <span class="task-badge badge-priority ${task.priority >= 4 ? 'high' : ''}">
+          <i class="fa-solid fa-flag"></i> ${task.priority}
+        </span>
+        <span class="task-meta">
+          <i class="fa-regular fa-calendar"></i> ${dateStr}
+          <i class="fa-regular fa-clock"></i> ${task.time}
+          <i class="fa-solid fa-tag"></i> ${task.category}
+        </span>
       </div>
     </div>
   `
 }
 
-function formatDate(dateStr) {
-  const date = new Date(dateStr + 'T00:00:00')
-  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
-}
-
-function renderBottomNav() {
-  return `
-    <nav class="bottom-nav">
-      <button class="nav-item ${state.currentTab === 'home' ? 'active' : ''}" data-tab="home">
-        <div class="nav-icon">${icons.home}</div>
-        <span>Home</span>
-      </button>
-      <button class="nav-item ${state.currentTab === 'today' ? 'active' : ''}" data-tab="today">
-        <div class="nav-icon">${icons.today}</div>
-        <span>Today</span>
-      </button>
-      <button class="nav-item ${state.currentTab === 'profile' ? 'active' : ''}" data-tab="profile">
-        <div class="nav-icon">${icons.profile}</div>
-        <span>Perfil</span>
-      </button>
-    </nav>
-  `
-}
-
-function renderFAB() {
-  return '<button class="fab" id="fab">+</button>'
-}
-
 function attachEventListeners() {
-  // Nav items (both desktop and mobile)
-  document.querySelectorAll('.nav-item, .header-nav-btn').forEach(item => {
-    item.addEventListener('click', (e) => {
-      const tab = e.currentTarget.dataset.tab
-      state.currentTab = tab
+  // Navigation
+  document.querySelectorAll('.nav-item, .sidebar-item').forEach(item => {
+    item.onclick = () => {
+      state.currentTab = item.dataset.tab
       render()
-    })
+    }
   })
   
-  // FAB
-  const fab = document.getElementById('fab')
-  if (fab) {
-    fab.addEventListener('click', () => openTaskModal())
-  }
+  // Fab
+  document.getElementById('fab').onclick = () => openTaskModal()
   
-  // Task cards
-  document.querySelectorAll('.task-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const id = card.dataset.id
-      openDetailModal(id)
-    })
+  // Task rows
+  document.querySelectorAll('.task-row').forEach(row => {
+    row.onclick = () => openDetailModal(row.dataset.id)
   })
   
   // Date filter
   const dateInput = document.getElementById('dateFilterInput')
-  if (dateInput) {
-    dateInput.addEventListener('change', (e) => {
-      state.dateFilter = e.target.value
-      render()
-    })
+  dateInput.onchange = () => {
+    state.dateFilter = dateInput.value
+    render()
   }
   
-  const clearBtn = document.getElementById('clearFilter')
-  if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
-      state.dateFilter = null
-      render()
-    })
+  document.getElementById('clearFilter').onclick = () => {
+    state.dateFilter = null
+    render()
   }
   
   // Profile name
-  const userName = document.getElementById('userName')
-  if (userName) {
-    userName.addEventListener('change', (e) => {
-      state.userName = e.target.value
-    })
+  document.getElementById('userName').onchange = (e) => {
+    setUserName(e.target.value)
+    render()
   }
 }

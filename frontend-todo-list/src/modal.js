@@ -7,208 +7,101 @@ export function openTaskModal(taskId = null) {
   currentEditId = taskId
   const task = taskId ? getTask(taskId) : null
   
-  const modalHTML = `
-    <div class="modal-overlay active" id="taskModal">
-      <div class="modal">
-        <div class="modal-header">
-          <h2>${task ? 'Editar Tarefa' : 'Nova Tarefa'}</h2>
-          <button class="close-btn" id="closeModal">×</button>
-        </div>
-        <div class="modal-body">
-          <form id="taskForm">
-            <div class="form-group">
-              <label>Título *</label>
-              <input type="text" id="title" required value="${task?.title || ''}" />
-            </div>
-            
-            <div class="form-group">
-              <label>Descrição</label>
-              <textarea id="description">${task?.description || ''}</textarea>
-            </div>
-            
-            <div class="form-group">
-              <label>Status</label>
-              <div class="status-toggle">
-                <button type="button" class="status-btn ${!task || task.status === 'TODO' ? 'active' : ''}" data-status="TODO">TODO</button>
-                <button type="button" class="status-btn ${task?.status === 'DOING' ? 'active' : ''}" data-status="DOING">DOING</button>
-                <button type="button" class="status-btn ${task?.status === 'DONE' ? 'active' : ''}" data-status="DONE">DONE</button>
-              </div>
-            </div>
-            
-            <div class="form-row">
-              <div class="form-group">
-                <label>Data *</label>
-                <input type="date" id="date" required value="${task?.date || ''}" />
-              </div>
-              <div class="form-group">
-                <label>Hora *</label>
-                <input type="time" id="time" required value="${task?.time || ''}" />
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label>Categoria</label>
-              <select id="category">
-                <option value="Trabalho" ${task?.category === 'Trabalho' ? 'selected' : ''}>Trabalho</option>
-                <option value="Pessoal" ${task?.category === 'Pessoal' ? 'selected' : ''}>Pessoal</option>
-                <option value="Saúde" ${task?.category === 'Saúde' ? 'selected' : ''}>Saúde</option>
-                <option value="Estudos" ${task?.category === 'Estudos' ? 'selected' : ''}>Estudos</option>
-                <option value="Outros" ${task?.category === 'Outros' ? 'selected' : ''}>Outros</option>
-              </select>
-            </div>
-            
-            <div class="form-group">
-              <label>Prioridade</label>
-              <div class="priority-buttons">
-                ${[1, 2, 3, 4, 5].map(p => `
-                  <button type="button" class="priority-btn ${task?.priority === p || (!task && p === 3) ? 'active' : ''}" data-priority="${p}">${p}</button>
-                `).join('')}
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label>Notificar no horário</label>
-              <div class="toggle-switch">
-                <div class="switch ${task?.alert ? 'active' : ''}" id="alertSwitch"></div>
-                <span>Ativar alerta</span>
-              </div>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">
-              ${task ? 'Salvar Alterações' : 'Criar Tarefa'}
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  `
+  const modal = document.getElementById('taskModal')
+  const form = document.getElementById('taskForm')
   
-  document.body.insertAdjacentHTML('beforeend', modalHTML)
-  attachModalListeners()
+  // Update modal title and button
+  document.getElementById('taskModalTitle').textContent = task ? 'Editar Tarefa' : 'Nova Tarefa'
+  document.getElementById('taskSubmitBtn').textContent = task ? 'Salvar Alterações' : 'Criar Tarefa'
+  
+  // Fill form
+  if (task) {
+    document.getElementById('taskTitle').value = task.title
+    document.getElementById('taskDescription').value = task.description
+    document.getElementById('taskDate').value = task.date
+    document.getElementById('taskTime').value = task.time
+    document.getElementById('taskCategory').value = task.category
+    
+    // Status
+    document.querySelectorAll('#statusGroup .toggle-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.status === task.status)
+    })
+    
+    // Priority
+    document.querySelectorAll('#priorityGroup .toggle-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.priority) === task.priority)
+    })
+    
+    // Alert
+    document.getElementById('taskAlert').classList.toggle('active', task.alert)
+  } else {
+    form.reset()
+    document.querySelectorAll('#statusGroup .toggle-btn')[0].classList.add('active')
+    document.querySelectorAll('#priorityGroup .toggle-btn')[2].classList.add('active')
+    document.getElementById('taskAlert').classList.remove('active')
+  }
+  
+  modal.classList.add('active')
+  attachTaskModalListeners()
 }
 
 export function openDetailModal(taskId) {
   const task = getTask(taskId)
   if (!task) return
   
-  const modalHTML = `
-    <div class="modal-overlay active" id="detailModal">
-      <div class="modal">
-        <div class="modal-header">
-          <h2>Detalhes da Tarefa</h2>
-          <button class="close-btn" id="closeDetailModal">×</button>
-        </div>
-        <div class="detail-content">
-          <div class="detail-field">
-            <div class="detail-label">Título</div>
-            <div class="detail-value"><strong>${task.title}</strong></div>
-          </div>
-          
-          <div class="detail-field">
-            <div class="detail-label">Descrição</div>
-            <div class="detail-value">${task.description || 'Sem descrição'}</div>
-          </div>
-          
-          <div class="detail-field">
-            <div class="detail-label">Status</div>
-            <div class="detail-value">
-              <span class="status-badge ${task.status.toLowerCase()}">${task.status}</span>
-            </div>
-          </div>
-          
-          <div class="detail-field">
-            <div class="detail-label">Data e Hora</div>
-            <div class="detail-value">${task.date} às ${task.time}</div>
-          </div>
-          
-          <div class="detail-field">
-            <div class="detail-label">Categoria</div>
-            <div class="detail-value">${task.category}</div>
-          </div>
-          
-          <div class="detail-field">
-            <div class="detail-label">Prioridade</div>
-            <div class="detail-value">${task.priority}/5</div>
-          </div>
-          
-          <div class="detail-field">
-            <div class="detail-label">Alerta</div>
-            <div class="detail-value">${task.alert ? 'Ativado' : 'Desativado'}</div>
-          </div>
-          
-          <div class="modal-actions">
-            <button class="btn btn-secondary" id="editTask">✏️ Editar</button>
-            <button class="btn btn-danger" id="deleteTask">🗑️ Excluir</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `
+  const modal = document.getElementById('detailModal')
   
-  document.body.insertAdjacentHTML('beforeend', modalHTML)
+  document.getElementById('detailTitle').innerHTML = `<strong>${task.title}</strong>`
+  document.getElementById('detailDescription').textContent = task.description || 'Sem descrição'
+  document.getElementById('detailStatus').innerHTML = `<span class="task-badge badge-status ${task.status.toLowerCase()}">${task.status}</span>`
+  document.getElementById('detailDateTime').innerHTML = `<i class="fa-regular fa-calendar"></i> ${task.date} às ${task.time}`
+  document.getElementById('detailCategory').innerHTML = `<i class="fa-solid fa-tag"></i> ${task.category}`
+  document.getElementById('detailPriority').innerHTML = `<i class="fa-solid fa-flag"></i> ${task.priority}/5`
+  document.getElementById('detailAlert').innerHTML = task.alert 
+    ? '<i class="fa-solid fa-bell"></i> Ativado' 
+    : '<i class="fa-solid fa-bell-slash"></i> Desativado'
   
-  document.getElementById('closeDetailModal').addEventListener('click', closeModal)
-  document.getElementById('editTask').addEventListener('click', () => {
-    closeModal()
-    openTaskModal(taskId)
-  })
-  document.getElementById('deleteTask').addEventListener('click', () => {
-    if (confirm('Deseja realmente excluir esta tarefa?')) {
-      deleteTask(taskId)
-      closeModal()
-      render()
-    }
-  })
-  
-  document.getElementById('detailModal').addEventListener('click', (e) => {
-    if (e.target.id === 'detailModal') closeModal()
-  })
+  modal.classList.add('active')
+  attachDetailModalListeners(taskId)
 }
 
-function attachModalListeners() {
+function attachTaskModalListeners() {
   const modal = document.getElementById('taskModal')
   const form = document.getElementById('taskForm')
   
   // Close
-  document.getElementById('closeModal').addEventListener('click', closeModal)
-  modal.addEventListener('click', (e) => {
-    if (e.target.id === 'taskModal') closeModal()
-  })
+  document.getElementById('closeTaskModal').onclick = () => closeModal('taskModal')
+  modal.onclick = (e) => {
+    if (e.target.id === 'taskModal') closeModal('taskModal')
+  }
   
-  // Status toggle
-  document.querySelectorAll('.status-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'))
+  // Toggle buttons
+  document.querySelectorAll('#statusGroup .toggle-btn, #priorityGroup .toggle-btn').forEach(btn => {
+    btn.onclick = () => {
+      const group = btn.parentElement
+      group.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'))
       btn.classList.add('active')
-    })
-  })
-  
-  // Priority buttons
-  document.querySelectorAll('.priority-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'))
-      btn.classList.add('active')
-    })
+    }
   })
   
   // Alert switch
-  document.getElementById('alertSwitch').addEventListener('click', (e) => {
-    e.target.classList.toggle('active')
-  })
+  document.getElementById('taskAlert').onclick = function() {
+    this.classList.toggle('active')
+  }
   
   // Form submit
-  form.addEventListener('submit', (e) => {
+  form.onsubmit = (e) => {
     e.preventDefault()
     
     const taskData = {
-      title: document.getElementById('title').value,
-      description: document.getElementById('description').value,
-      status: document.querySelector('.status-btn.active').dataset.status,
-      date: document.getElementById('date').value,
-      time: document.getElementById('time').value,
-      category: document.getElementById('category').value,
-      priority: parseInt(document.querySelector('.priority-btn.active').dataset.priority),
-      alert: document.getElementById('alertSwitch').classList.contains('active')
+      title: document.getElementById('taskTitle').value,
+      description: document.getElementById('taskDescription').value,
+      status: document.querySelector('#statusGroup .toggle-btn.active').dataset.status,
+      date: document.getElementById('taskDate').value,
+      time: document.getElementById('taskTime').value,
+      category: document.getElementById('taskCategory').value,
+      priority: parseInt(document.querySelector('#priorityGroup .toggle-btn.active').dataset.priority),
+      alert: document.getElementById('taskAlert').classList.contains('active')
     }
     
     if (currentEditId) {
@@ -217,12 +110,33 @@ function attachModalListeners() {
       addTask(taskData)
     }
     
-    closeModal()
+    closeModal('taskModal')
     render()
-  })
+  }
 }
 
-function closeModal() {
-  const modals = document.querySelectorAll('.modal-overlay')
-  modals.forEach(modal => modal.remove())
+function attachDetailModalListeners(taskId) {
+  const modal = document.getElementById('detailModal')
+  
+  document.getElementById('closeDetailModal').onclick = () => closeModal('detailModal')
+  modal.onclick = (e) => {
+    if (e.target.id === 'detailModal') closeModal('detailModal')
+  }
+  
+  document.getElementById('editTaskBtn').onclick = () => {
+    closeModal('detailModal')
+    openTaskModal(taskId)
+  }
+  
+  document.getElementById('deleteTaskBtn').onclick = () => {
+    if (confirm('Deseja realmente excluir esta tarefa?')) {
+      deleteTask(taskId)
+      closeModal('detailModal')
+      render()
+    }
+  }
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active')
 }
