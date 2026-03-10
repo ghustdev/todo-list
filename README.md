@@ -2,6 +2,9 @@
 
 Projeto de gerenciamento de tarefas com arquitetura separada em frontend e backend, desenvolvido em Java puro com persistência em arquivo CSV.
 
+#### Acesse o frontend da aplicação:
+[todolist.io](https://todo-list-java-snowy.vercel.app/)
+
 ## Estrutura do Projeto
 
 O projeto está organizado em duas partes principais:
