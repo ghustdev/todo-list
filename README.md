@@ -1,72 +1,62 @@
-# TODO List Java
+# TODO List Java - Projeto Completo
 
-Projeto de gerenciamento de tarefas via linha de comando (CLI), desenvolvido em Java puro com persistencia em arquivo CSV, utilizando a arquitetura MVC (Model-View-Controller) simplificada com uma camada extra de repository. O objetivo e oferecer um fluxo simples para cadastrar, listar, editar e remover tarefas.
+Projeto de gerenciamento de tarefas com arquitetura separada em frontend e backend, desenvolvido em Java puro com persistência em arquivo CSV.
 
-### Breve explicação sobre MVC e as camada do projeto
-#### Model (O Dado)
-É a classe Tarefa. Ela não tem lógica de salvamento ou menus. Sua única função é definir o que é uma tarefa (ID, Nome, Status, etc.).
+## Estrutura do Projeto
 
-#### View / CLI (A Interface)
-É a classe TaskManager (Main) e as CLIs. Ela cuida exclusivamente da interação com o usuário.
+O projeto está organizado em duas partes principais:
 
-Responsabilidade: Mostrar o menu, ler o que o usuário digita (Scanner) e exibir os resultados na tela (System.out.println).
+### 📁 Backend (`backend-todo-list/`)
+Contém toda a lógica de negócio, persistência de dados e modelo de domínio em Java.
+- **Arquitetura**: MVC com camada de Repository
+- **Tecnologia**: Java 8+
+- **Persistência**: Arquivo CSV
 
-Regra: Ela não sabe que existe um arquivo CSV; ela apenas pede coisas para o Service.
+[📖 Documentação completa do Backend](./backend-todo-list/README.md)
 
-#### Controller/Service (A Lógica de Negócio)
-É o "cérebro" da aplicação (TaskService).
+### 📁 Frontend (`frontend-todo-list/`)
+Interface web moderna para interação com o sistema de tarefas.
+- **Tecnologia**: JavaScript vanilla
+- **Interface**: Web (HTML/CSS/JS)
 
-Responsabilidade: Aqui é onde as decisões são tomadas. Por exemplo: "Qual será o próximo ID?" e funções intermediárias para maior controle entre CLI e a persistência.
+[📖 Documentação do Frontend](./frontend-todo-list/README.md)
 
-Ponto Chave: Se você precisasse de uma regra que diz que "não pode ter duas tarefas com o mesmo nome", essa regra ficaria aqui.
+## Funcionalidades Gerais
 
-#### repository (A Persistência)
-É a camada que lida com o mundo externo (TaskRepository).
-
-Responsabilidade: Ler e escrever no arquivo tasks.csv (escolhi CSV, pois a implementação é nativa do Java puro).
-
-Isolamento: Se no futuro você quiser mudar de CSV para um Banco de Dados SQL ou para um arquivo JSON, você só mexe aqui. O restante do sistema nem perceberia a mudança.
-
-## Funcionalidades
-- Cadastro de tarefas com nome, descricao, data final, prioridade, categoria e status.
-- Listagem de tarefas armazenadas.
-- Editção de tarefas (ainda não implementado)
-- Filtragem de trarefas (ainda não implementado)
-- Exclusao de tarefas por ID.
-- Persistencia local em `tasks.csv`.
-
-## Estrutura do projeto
-- `src/main/TaskManager.java`: ponto de entrada da aplicacao (Main).
-- `src/view/Interface.java`: interface CLI e fluxo de menus.
-- `src/services/TaskService.java`: regras de negocio.
-- `src/repository/TaskRepository.java`: leitura e escrita em arquivo.
-- `src/model/Task.java` e `src/model/TaskStatus.java`: modelo de dados.
+- ✅ Cadastro de tarefas com nome, descrição, data final, prioridade, categoria e status
+- ✅ Listagem de tarefas armazenadas
+- ✅ Edição de tarefas
+- ✅ Filtragem de tarefas por categoria, prioridade, status e data
+- ✅ Exclusão de tarefas por ID
+- ✅ Sistema de alarmes para tarefas
+- ✅ Persistência local em `tasks.csv`
 
 ## Requisitos
-- Java 8+ (recomendado 11+).
 
-## Como executar
-1) Abra o projeto na sua IDE (ex.: IntelliJ).
-2) Execute a classe `main.TaskManager`.
+- **Backend**: Java 8+ (recomendado 11+)
+- **Frontend**: Navegador web moderno
 
-Observacao: as opcoes de editar, quantidade por status e filtro por data ainda nao estao implementadas no codigo.
+## Como Executar
 
-## Uso basico
-Ao iniciar, o menu principal permite:
-- Adicionar tarefa.
-- Listar tarefas.
-- Deletar tarefa (por ID).
+### Backend (CLI)
+1. Navegue até `backend-todo-list/`
+2. Abra o projeto na sua IDE (ex.: IntelliJ)
+3. Execute a classe `Main.java`
+4. As informações são salvas em .csv
 
-## Persistencia
-As tarefas sao salvas em `tasks.csv`, no formato:
+### Frontend (Web)
+1. Navegue até `frontend-todo-list/`
+2. Abra o arquivo `index.html` no navegador
+3. Ou utilize um servidor local (ex.: Live Server)
+4. As informações (states) são salvas em LocalStorage
+
+## Persistência
+
+As tarefas são salvas em `tasks.csv`, no formato:
 ```
-id;nome;descricao;data_final;prioridade;categoria;status
+id;nome;descricao;data_final;prioridade;categoria;status;alarme_ativo;minutos_antecedencia
 ```
 
-## Adicionar no futuro
-- Implementar edicao de tarefas.
-- Implementar filtro por data e quantidade por status.
-Validacoes adicionais e mensagens mais detalhadas (está bem simples ainda).
+## Licença
 
-## Licenca
-Este projeto esta sob a licenca de `Gustavo Cardoso` e `Acelera ZG`.
+Este projeto está sob a licença de `Gustavo Cardoso` e `Acelera ZG`.
