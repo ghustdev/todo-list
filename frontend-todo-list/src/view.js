@@ -1,5 +1,5 @@
 import { state } from "./model.js";
-import { openTaskModal, openDetailModal } from "./controller.js";
+import { openTaskModal, openDetailModal, openChangeStatusModal } from "./controller.js";
 import { setUserName } from "./model.js";
 
 export function render() {
@@ -170,10 +170,16 @@ function attachEventListeners() {
     render();
   };
 
-  // Alter status of gourp tasks
+  // Alter status of group tasks
   const changeStatusInput = document.getElementById("changeStatus");
-  changeStatusInput.onclick = () => {
-    alert("FUTURE IMPLEMENTATION: Alterar status de todas as tarefas do grupo pela data (Pendentes)");
+  if (changeStatusInput) {
+    changeStatusInput.onclick = () => {
+      if (!state.dateFilter) {
+        alert("Selecione uma data no calendário primeiro!");
+        return;
+      }
+      openChangeStatusModal();
+    };
   }
 
   document.getElementById("clearFilter").onclick = () => {

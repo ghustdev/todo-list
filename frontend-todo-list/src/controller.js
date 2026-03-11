@@ -3,6 +3,45 @@ import { render } from "./view.js";
 
 let currentEditId = null;
 
+export function openChangeStatusModal() {
+  const modal = document.getElementById("changeStatusModal");
+  modal.classList.add("active");
+  attachChangeStatusModalListeners();
+}
+
+function attachChangeStatusModalListeners() {
+  const modal = document.getElementById("changeStatusModal");
+  
+  document.getElementById("closeChangeStatusModal").onclick = () => closeModal("changeStatusModal");
+  modal.onclick = (e) => {
+    if (e.target.id === "changeStatusModal") closeModal("changeStatusModal");
+  };
+
+  document.querySelectorAll(".status-option").forEach((btn) => {
+    btn.onclick = () => {
+      const newStatus = btn.dataset.status;
+      changeGroupStatus(newStatus);
+      closeModal("changeStatusModal");
+      render();
+    };
+  });
+}
+
+function changeGroupStatus(newStatus) {
+  const tasksToUpdate = state.tasks.filter(
+    (t) => t.date === state.dateFilter
+  );
+  
+  if (tasksToUpdate.length === 0) {
+    alert("Nenhuma tarefa pendente encontrada para esta data!");
+    return;
+  }
+
+  tasksToUpdate.forEach((task) => {
+    updateTask(task.id, { status: newStatus });
+  });
+}
+
 export function openTaskModal(taskId = null) {
   currentEditId = taskId;
   const task = taskId ? getTask(taskId) : null;
@@ -125,7 +164,7 @@ function attachTaskModalListeners() {
       priority: parseInt(
         document.querySelector("#priorityGroup .toggle-btn.active").dataset.priority,
       ),
-      alert: document.getElementById("taskAlert").classList.contains("active"),m,mkmkkmkm
+      alert: document.getElementById("taskAlert").classList.contains("active"),
     };
 
     if (currentEditId) {

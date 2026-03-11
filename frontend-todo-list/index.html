@@ -247,7 +247,33 @@
       </div>
     </div>
 
-    <script src="/populate-tasks.js"></script>
+    <!-- Change Status Modal -->
+    <div class="modal-overlay" id="changeStatusModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title">Alterar Status do Grupo</h2>
+          <button class="close-btn" id="closeChangeStatusModal">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p style="margin-bottom: 20px; color: #666;">Selecione o novo status para todas as tarefas pendentes da data selecionada:</p>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button class="status-option btn btn-primary" data-status="TODO" style="justify-content: center;">
+              <i class="fa-regular fa-circle"></i> TODO
+            </button>
+            <button class="status-option btn btn-primary" data-status="DOING" style="justify-content: center;">
+              <i class="fa-solid fa-spinner"></i> DOING
+            </button>
+            <button class="status-option btn btn-primary" data-status="DONE" style="justify-content: center;">
+              <i class="fa-solid fa-check"></i> DONE
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <script src="/populate-tasks.js"></script> -->
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
