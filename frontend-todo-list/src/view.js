@@ -38,6 +38,7 @@ function updateNavigation() {
 
 // Load tab Home and tasks
 function renderHome() {
+  // FUTURE IMPLEMENTATION: Add filter to alter status of tasks group 
   let tasks = state.tasks;
 
   if (state.dateFilter) {
@@ -51,10 +52,12 @@ function renderHome() {
   renderTaskList(tasks, "homeTaskList");
 }
 
+// Load tab Today and tasks
 function renderToday() {
   const today = new Date().toISOString().split("T")[0];
   const tasks = state.tasks.filter((t) => t.date === today);
 
+  // Date infos
   const dateStr = new Date().toLocaleDateString("pt-BR", {
     weekday: "long",
     day: "numeric",
@@ -65,6 +68,7 @@ function renderToday() {
   renderTaskList(tasks, "todayTaskList", true);
 }
 
+// Load tab Profile and tasks
 function renderProfile() {
     document.getElementById("avatarLetter").textContent = state.userName
     .charAt(0)
@@ -165,6 +169,12 @@ function attachEventListeners() {
     state.dateFilter = dateInput.value;
     render();
   };
+
+  // Alter status of gourp tasks
+  const changeStatusInput = document.getElementById("changeStatus");
+  changeStatusInput.onclick = () => {
+    alert("FUTURE IMPLEMENTATION: Alterar status de todas as tarefas do grupo pela data (Pendentes)");
+  }
 
   document.getElementById("clearFilter").onclick = () => {
     state.dateFilter = null;

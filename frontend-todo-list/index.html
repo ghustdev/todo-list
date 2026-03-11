@@ -40,10 +40,16 @@
           <h1 class="page-title">Todas as Tarefas</h1>
         </div>
         <div class="toolbar">
-          <input type="date" class="toolbar-btn" id="dateFilterInput" />
-          <button class="toolbar-btn" id="clearFilter" style="display: none;">
-            <i class="fa-solid fa-xmark"></i> Limpar
-          </button>
+          <div class="toolbar-calendar">
+            <input type="date" class="toolbar-btn" id="dateFilterInput" />
+            <button class="toolbar-btn" id="clearFilter" style="display: none;">
+              <i class="fa-solid fa-xmark"></i> Limpar
+            </button>
+          </div>
+          <!-- Alter status of gourp tasks -->
+          <button class="toolbar-btn" id="changeStatus" style="display: flex;">
+            <i class="fa-solid fa-arrow-rotate-right"></i> Alterar status de um grupo de Tarefas
+        </button>
         </div>
         <div id="homeTaskList"></div>
       </div>

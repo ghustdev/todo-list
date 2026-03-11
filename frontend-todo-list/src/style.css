@@ -148,7 +148,12 @@ body {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
+  justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.toolbar-calendar {
+  display: flex;
 }
 
 .toolbar-btn {
@@ -207,7 +212,7 @@ body {
 }
 
 .task-row:hover {
-  background: var(--todo-hover);
+  background: var(--todo-sidebar);
 }
 
 .task-checkbox {
@@ -233,6 +238,9 @@ body {
   flex: 1;
   display: flex;
   align-items: center;
+  background: var(--todo-sidebar);
+  padding: 5px;
+  border-radius: 10px;
   gap: 8px;
   flex-wrap: wrap;
 }

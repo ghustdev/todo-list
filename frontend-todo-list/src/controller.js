@@ -118,14 +118,12 @@ function attachTaskModalListeners() {
     const taskData = {
       title: document.getElementById("taskTitle").value,
       description: document.getElementById("taskDescription").value,
-      status: document.querySelector("#statusGroup .toggle-btn.active").dataset
-        .status,
+      status: document.querySelector("#statusGroup .toggle-btn.active").dataset.status,
       date: document.getElementById("taskDate").value,
       time: document.getElementById("taskTime").value,
       category: document.getElementById("taskCategory").value,
       priority: parseInt(
-        document.querySelector("#priorityGroup .toggle-btn.active").dataset
-          .priority,
+        document.querySelector("#priorityGroup .toggle-btn.active").dataset.priority,
       ),
       alert: document.getElementById("taskAlert").classList.contains("active"),
     };
