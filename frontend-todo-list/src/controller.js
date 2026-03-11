@@ -10,7 +10,7 @@ export function openChangeStatusModal() {
   );
 
   if (tasks.length === 0) {
-    alert("Nenhuma tarefa encontrada para esta data!");
+    alert("Nenhuma tarefa pendente encontrada para esta data!");
     return;
   }
 
@@ -98,7 +98,6 @@ function changeGroupStatus(newStatus, selectedTaskIds) {
   });
 
   alert(`${selectedTaskIds.length} tarefa(s) atualizada(s) para ${newStatus}!`);
-  
 }
 
 export function openTaskModal(taskId = null) {
