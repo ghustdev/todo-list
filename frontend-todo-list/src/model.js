@@ -16,6 +16,7 @@ export function loadState() {
     const data = JSON.parse(saved)
     state.tasks = data.tasks || []
     state.userName = data.userName || 'Usuário'
+    state.currentTab = data.currentTab  || 'today'
   }
 }
 
@@ -23,9 +24,29 @@ export function loadState() {
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
     tasks: state.tasks,
-    userName: state.userName
+    userName: state.userName,
+    currentTab: state.currentTab
   }))
 }
+
+// Exemplo:
+/* {
+  "tasks": [
+    {
+      "id": "550e8400-...",
+      "title": "Reunião com equipe",
+      "status": "TODO",
+      "date": "2025-07-17",
+      "time": "09:00",
+      "category": "Trabalho",
+      "priority": 5,
+      "alert": true,
+      "createdAt": "2025-07-17T08:00:00.000Z"
+    }
+  ],
+  "userName": "Usuário",
+  "currentTab": "today"
+} */
 
 export function addTask(task) {
   state.tasks.push({
