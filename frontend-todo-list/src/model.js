@@ -29,25 +29,6 @@ function saveState() {
   }))
 }
 
-// Exemplo:
-/* {
-  "tasks": [
-    {
-      "id": "550e8400-...",
-      "title": "Reunião com equipe",
-      "status": "TODO",
-      "date": "2025-07-17",
-      "time": "09:00",
-      "category": "Trabalho",
-      "priority": 5,
-      "alert": true,
-      "createdAt": "2025-07-17T08:00:00.000Z"
-    }
-  ],
-  "userName": "Usuário",
-  "currentTab": "today"
-} */
-
 export function addTask(task) {
   state.tasks.push({
     id: crypto.randomUUID(), // Unique ID
