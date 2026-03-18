@@ -2,6 +2,8 @@
 
 Projeto de gerenciamento de tarefas com arquitetura separada em frontend e backend, desenvolvido em Java puro com persistência em arquivo CSV.
 
+<img width="1910" height="940" alt="mvp todo list" src="https://github.com/user-attachments/assets/1d482761-c6d5-4e72-b362-87c020057dab" />
+
 #### Acesse o frontend da aplicação:
 [todolist.io](https://todo-list-java-snowy.vercel.app/)
 
