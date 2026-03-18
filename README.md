@@ -1,4 +1,4 @@
-# Todo List - Projeto Full Stack
+# Todo List (MVP) - Projeto Full Stack
 
 Projeto de gerenciamento de tarefas com arquitetura separada em frontend e backend, desenvolvido em Java puro com persistência em arquivo CSV.
 
