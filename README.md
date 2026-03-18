@@ -1,4 +1,4 @@
-# TODO List Java - Projeto Completo
+# Todo List - Projeto Full Stack
 
 Projeto de gerenciamento de tarefas com arquitetura separada em frontend e backend, desenvolvido em Java puro com persistência em arquivo CSV.
 
