@@ -65,3 +65,11 @@ id;nome;descricao;data_final;prioridade;categoria;status;alarme_ativo;minutos_an
 ## Licença
 
 Este projeto está sob a licença de `Gustavo Cardoso` e `Acelera ZG`.
+
+## 👨‍💻 Autor
+
+Desenvolvido por [ghustdev](https://github.com/ghustdev)
+
+---
+
+⭐ Se este projeto foi útil para você, considere dar uma estrela!
