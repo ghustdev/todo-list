@@ -38,7 +38,6 @@ public class CliListPerStatusAction {
 				System.out.println("Data final (dd/MM/yyyy HH:mm): " + task.getDateTimeFinished().format(cli.dateTimeFormatter));
 				System.out.println("Categoria: " + task.getCategory());
 				System.out.println("Status: " + task.getStatus());
-				System.out.println("Alarme: " + (task.isAlarmEnabled() ? "Ativo (" + task.getAlarmAdvanceMinutes() + " min antes)" : "Inativo"));
 				System.out.println("+================================================+");
 			}
 			cli.pause();

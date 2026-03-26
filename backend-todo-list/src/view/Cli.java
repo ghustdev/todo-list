@@ -1,9 +1,11 @@
 package view;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Cli {
 	Scanner scanner = new Scanner(System.in);
+	DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 	
 	public void cliMainMenu() {
 		CliMenuAction.cliManu(this);
