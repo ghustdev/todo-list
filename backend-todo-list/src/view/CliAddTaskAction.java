@@ -45,27 +45,9 @@ public class CliAddTaskAction {
 				optionStatus = Integer.parseInt(cli.scanner.nextLine());
 			}
 			TaskStatus status = (optionStatus == 2) ? TaskStatus.DOING : (optionStatus == 3) ? TaskStatus.DONE : TaskStatus.TODO;
-
-			System.out.print("Ativar alarme? (sim/nao): ");
-			String alarmOption = cli.scanner.nextLine().trim().toLowerCase();
-			while (!alarmOption.equals("sim") && !alarmOption.equals("nao")) {
-				System.out.print("Erro: Responda com sim ou nao: ");
-				alarmOption = cli.scanner.nextLine().trim().toLowerCase();
-			}
-
-			boolean alarmEnabled = alarmOption.equals("sim");
-			int alarmAdvanceMinutes = 0;
-			if (alarmEnabled) {
-				System.out.print("Antecedência do alarme em minutos (ex: 120): ");
-				alarmAdvanceMinutes = Integer.parseInt(cli.scanner.nextLine());
-				while (alarmAdvanceMinutes < 1) {
-					System.out.print("Erro: Insira um valor inteiro maior que 0: ");
-					alarmAdvanceMinutes = Integer.parseInt(cli.scanner.nextLine());
-				}
-			}
 			
 			TaskService taskService = new TaskService();
-			taskService.addTask(name, description, dateTimeFinished, priorityLevel, category, status, alarmEnabled, alarmAdvanceMinutes);
+			taskService.addTask(name, description, dateTimeFinished, priorityLevel, category, status);
 			
 			System.out.println("+================================================+");
 			System.out.println("Terafa adicionada com sucesso!");

@@ -16,7 +16,6 @@ public class TaskRepository {
 	
 	String path = "tasks.csv";
 	
-	// Adicionar tarefas no arquivo
 	public void saveTask(List<Task> tasks) {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
 			for (Task task : tasks) {
@@ -27,9 +26,7 @@ public class TaskRepository {
 						task.getDateTimeFinished().format(dateTimeFormatter) + ";" +
 						task.getPriorityLevel() + ";" +
 						task.getCategory() + ";" +
-						task.getStatus() + ";" +
-						task.isAlarmEnabled() + ";" +
-						task.getAlarmAdvanceMinutes()
+						task.getStatus()
 				);
 				bw.newLine();
 			}
@@ -39,12 +36,10 @@ public class TaskRepository {
 		}
 	}
 	
-	// Ler tarefas do arquivo
 	public List<Task> getTasks() {
 		List<Task> tasks = new ArrayList<>();
 		File file = new File(path);
 		
-		// Caso a lista seja vazia
 		if (!file.exists()) {
 			return tasks;
 		}
@@ -66,20 +61,16 @@ public class TaskRepository {
 						dateTimeFinished = LocalDateTime.parse(data[3], dateTimeFormatter);
 					}
 					else {
-						// Compatibilidade com o formato antigo sem hora.
 						dateTimeFinished = LocalDate.parse(data[3], dtf).atTime(23, 59);
 					}
 					int priorityLevel =  Integer.parseInt(data[4]);
 					String category =  data[5];
 					TaskStatus status =  TaskStatus.valueOf(data[6]);
-					boolean alarmEnabled = data.length > 7 && Boolean.parseBoolean(data[7]);
-					int alarmAdvanceMinutes = data.length > 8 ? Integer.parseInt(data[8]) : 120;
 					
-					Task task = new Task(id, name, description, dateTimeFinished, priorityLevel, category, status, alarmEnabled, alarmAdvanceMinutes);
+					Task task = new Task(id, name, description, dateTimeFinished, priorityLevel, category, status);
 					tasks.add(task);
 				}
 				catch (RuntimeException ignored) {
-					// Ignora linha malformada sem derrubar a leitura inteira.
 				}
 			}
 			

@@ -46,7 +46,6 @@ public class CliMenuAction {
 					cli.cliUpdateTask();
 				}
 				else if (optionMenu == 0) {
-					cli.stopAlarmNotifier();
 					cli.scanner.close();
 					break;
 				}

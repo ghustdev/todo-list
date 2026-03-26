@@ -18,15 +18,13 @@ public class TaskService {
 			LocalDateTime dateTimeFinished,
 			Integer priorityLevel,
 			String category,
-			TaskStatus status,
-			boolean alarmEnabled,
-			int alarmAdvanceMinutes
+			TaskStatus status
 	) {
 		List<Task> listTasks = repository.getTasks();
 		
 		int maxId = listTasks.stream().mapToInt(Task::getId).max().orElse(0) + 1;
 		
-		Task newTask = new Task(maxId, name, description, dateTimeFinished, priorityLevel, category, status, alarmEnabled, alarmAdvanceMinutes);
+		Task newTask = new Task(maxId, name, description, dateTimeFinished, priorityLevel, category, status);
 		listTasks.add(newTask);
 		repository.saveTask(listTasks);
 	}
@@ -78,16 +76,14 @@ public class TaskService {
 			LocalDateTime dateTimeFinished,
 			Integer priorityLevel,
 			String category,
-			TaskStatus status,
-			boolean alarmEnabled,
-			int alarmAdvanceMinutes
+			TaskStatus status
 	) {
 		List<Task> listTasks = repository.getTasks();
 		
 		for (int i = 0; i < listTasks.size(); i++) {
 			Task task = listTasks.get(i);
 			if (task.getId() == id) {
-				Task updatedTask = new Task(id, name, description, dateTimeFinished, priorityLevel, category, status, alarmEnabled, alarmAdvanceMinutes);
+				Task updatedTask = new Task(id, name, description, dateTimeFinished, priorityLevel, category, status);
 				listTasks.set(i, updatedTask);
 				repository.saveTask(listTasks);
 				return true;
@@ -107,18 +103,5 @@ public class TaskService {
 			return true;
 		}
 		return false;
-	}
-
-	public List<Task> listTasksWithAlarmDue(LocalDateTime referenceDateTime) {
-		List<Task> listTasks = repository.getTasks();
-		return listTasks.stream()
-				.filter(task -> task.isAlarmEnabled())
-				.filter(task -> task.getStatus() != TaskStatus.DONE)
-				.filter(task -> {
-					LocalDateTime dueDateTime = task.getDateTimeFinished();
-					LocalDateTime startAlarm = dueDateTime.minusMinutes(task.getAlarmAdvanceMinutes());
-					return !referenceDateTime.isBefore(startAlarm) && !referenceDateTime.isAfter(dueDateTime);
-				})
-				.collect(Collectors.toList());
 	}
 }

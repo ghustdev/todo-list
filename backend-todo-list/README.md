@@ -12,7 +12,7 @@ O backend segue o padrão MVC (Model-View-Controller) com uma camada adicional d
 Representa as entidades de domínio da aplicação.
 
 - **Task.java**: Classe que define a estrutura de uma tarefa
-  - Atributos: id, name, description, dateTimeFinished, priorityLevel, category, status, alarmEnabled, alarmAdvanceMinutes
+  - Atributos: id, name, description, dateTimeFinished, priorityLevel, category, status
   
 - **TaskStatus.java**: Enum com os possíveis status de uma tarefa
   - Valores: TODO, IN_PROGRESS, DONE
@@ -34,9 +34,6 @@ Contém toda a lógica de negócio e regras da aplicação.
   - `filterTasksPerDate()`: Filtra por data
   - `updateTask()`: Atualiza tarefa existente
   - `deleteTask()`: Remove tarefa por ID
-  - `listTasksWithAlarmDue()`: Lista tarefas com alarme ativo
-
-- **AlarmNotifier.java**: Gerencia notificações de alarmes
 
 **Responsabilidade**: Implementar regras de negócio, validações e coordenar operações entre View e Repository.
 
@@ -85,8 +82,7 @@ backend-todo-list/
 │   ├── repository/
 │   │   └── TaskRepository.java
 │   ├── services/
-│   │   ├── TaskService.java
-│   │   └── AlarmNotifier.java
+│   │   └── TaskService.java
 │   ├── view/
 │   │   ├── Cli.java
 │   │   ├── CliAddTaskAction.java
@@ -121,13 +117,13 @@ backend-todo-list/
 As tarefas são armazenadas em `tasks.csv` com o seguinte formato:
 
 ```
-id;nome;descricao;data_final;prioridade;categoria;status;alarme_ativo;minutos_antecedencia
+id;nome;descricao;data_final;prioridade;categoria;status
 ```
 
 **Exemplo**:
 ```
-1;Estudar Java;Revisar conceitos de POO;25/12/2024 18:00;1;Estudos;TODO;true;120
-2;Reunião;Apresentar projeto;26/12/2024 14:30;2;Trabalho;IN_PROGRESS;false;120
+1;Estudar Java;Revisar conceitos de POO;25/12/2024 18:00;1;Estudos;TODO
+2;Reunião;Apresentar projeto;26/12/2024 14:30;2;Trabalho;IN_PROGRESS
 ```
 
 ## Vantagens da Arquitetura
