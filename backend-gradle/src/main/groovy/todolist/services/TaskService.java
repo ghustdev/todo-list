@@ -10,7 +10,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaskService {
-	TaskRepository repository = new TaskRepository();
+	TaskRepository repository;
+	
+	// Apenas para testes
+	public TaskService(TaskRepository repository) {
+		this.repository = repository;
+	}
+	
+	public TaskService() {
+		this.repository = new TaskRepository();
+	}
 	
 	public void addTask(
 			String name,
