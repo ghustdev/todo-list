@@ -13,9 +13,9 @@ public class Task {
 	private TaskStatus status;
 	private String category;
 	
-	public Task() {}
+	Task() {}
 	
-	public Task(
+	Task(
 			int id,
 			String name,
 			String description,
