@@ -48,10 +48,6 @@ public class Task {
 	public String getDescription() {
 		return description;
 	}
-	
-	public LocalDate getDateFinished() {
-		return dateTimeFinished.toLocalDate();
-	}
 
 	public LocalDateTime getDateTimeFinished() {
 		return dateTimeFinished;

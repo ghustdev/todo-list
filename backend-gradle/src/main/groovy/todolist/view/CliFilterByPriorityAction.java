@@ -1,28 +1,26 @@
 package todolist.view;
 
 import todolist.model.Task;
-import todolist.services.TaskService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class CliFilterPerDateAction {
-	static void cliFilterPerDate(Cli cli) {
+public class CliFilterByPriorityAction {
+	static void cliListPerPriority(Cli cli) {
 		try {
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			TaskService taskService = new TaskService();
-			
 			System.out.println("+================================================+");
-			System.out.println("|            Filtrar Tarefas por Data            |");
+			System.out.println("|         Listar Tarefas por Prioridade          |");
 			System.out.println("+================================================+");
-			System.out.print("Insira a data final (dd/MM/yyyy): ");
-			LocalDate dateFinished = LocalDate.parse(cli.scanner.nextLine(), dtf);
+			System.out.print("Insira a prioridade (1 a 5): ");
+			int priorityLevel = Integer.parseInt(cli.scanner.nextLine());
+			while (priorityLevel < 1 || priorityLevel > 5) {
+				System.out.print("Erro: Insira um nível de prioridade correto (1 à 5): ");
+				priorityLevel = Integer.parseInt(cli.scanner.nextLine());
+			}
 			
-			List<Task> tasks = taskService.filterTasksPerDate(dateFinished);
+			List<Task> tasks = cli.getTaskService().filterTasksByPriority(priorityLevel);
 			
 			if (tasks == null || tasks.isEmpty()) {
-				System.out.println("Nenhuma tarefa encontrada para essa data");
+				System.out.println("Nenhuma tarefa encontrada para essa prioridade");
 				System.out.println("+================================================+");
 				cli.pause();
 				return;
@@ -33,7 +31,7 @@ public class CliFilterPerDateAction {
 				System.out.println("Nome: " + task.getName());
 				System.out.println("Descricao: " + task.getDescription());
 				System.out.println("Data final (dd/MM/yyyy HH:mm): " + task.getDateTimeFinished().format(cli.dateTimeFormatter));
-				System.out.println("Categoria: " + task.getCategory());
+				System.out.println("Prioridade: " + task.getPriorityLevel());
 				System.out.println("Status: " + task.getStatus());
 				System.out.println("+================================================+");
 			}
@@ -41,7 +39,7 @@ public class CliFilterPerDateAction {
 		}
 		catch (Exception e) {
 			System.out.println("+================================================+");
-			System.out.println("Erro: Algum erro em filtrar tarefas por data");
+			System.out.println("Erro: Algum erro em listar tarefas por prioridade");
 			System.out.println("+================================================+");
 			cli.pause();
 		}

@@ -1,12 +1,8 @@
 package todolist.view;
 
-import todolist.services.TaskService;
-
 public class CliDeleteTaskAction {
 	static void cliDeleteTask(Cli cli) {
 		try {
-			TaskService taskService = new TaskService();
-			
 			System.out.println("+================================================+");
 			System.out.println("|                Deletar Tarefa                  |");
 			System.out.println("+================================================+");
@@ -14,7 +10,7 @@ public class CliDeleteTaskAction {
 			int id = cli.scanner.nextInt();
 			cli.scanner.nextLine();
 			
-			boolean removedId = taskService.deleteTask(id);
+			boolean removedId = cli.getTaskService().deleteTask(id);
 			
 			if (removedId) {
 				System.out.println("+================================================+");

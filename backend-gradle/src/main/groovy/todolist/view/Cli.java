@@ -1,11 +1,24 @@
 package todolist.view;
 
+import todolist.services.TaskService;
+
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Cli {
-	Scanner scanner = new Scanner(System.in);
-	DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+	Scanner scanner;
+	DateTimeFormatter dateTimeFormatter;
+	private final TaskService taskService;
+	
+	public Cli(TaskService taskService) {
+		this.scanner = new Scanner(System.in);
+		this.dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		this.taskService = taskService;
+	}
+	
+	public TaskService getTaskService() {
+		return taskService;
+	}
 	
 	public void cliMainMenu() {
 		CliMenuAction.cliManu(this);
@@ -20,23 +33,23 @@ public class Cli {
 	}
 	
 	public void cliListAllTasks() {
-		CliListAllTasksAction.cliListAllTasks(this);
+		CliListTasksAction.cliListAllTasks(this);
 	}
 	
 	public void cliListPerCategory() {
-		CliListPerCategoryAction.cliListPerCategory(this);
+		CliFilterByCategoryAction.cliListPerCategory(this);
 	}
 	
 	public void cliListPerPriority() {
-		CliListPerPriorityAction.cliListPerPriority(this);
+		CliFilterByPriorityAction.cliListPerPriority(this);
 	}
 	
 	public void cliListPerStatus() {
-		CliListPerStatusAction.cliListPerStatus(this);
+		CliFilterByStatusAction.cliListPerStatus(this);
 	}
 	
 	public void cliFilterPerDate() {
-		CliFilterPerDateAction.cliFilterPerDate(this);
+		CliFilterByDateAction.cliFilterPerDate(this);
 	}
 	
 	public void cliDeleteTask() {

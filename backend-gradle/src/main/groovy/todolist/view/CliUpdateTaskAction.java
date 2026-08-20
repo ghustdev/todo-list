@@ -1,7 +1,6 @@
 package todolist.view;
 
 import todolist.model.TaskStatus;
-import todolist.services.TaskService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,8 +47,7 @@ public class CliUpdateTaskAction {
 			}
 			TaskStatus status = (optionStatus == 2) ? TaskStatus.DOING : (optionStatus == 3) ? TaskStatus.DONE : TaskStatus.TODO;
 			
-			TaskService taskService = new TaskService();
-			boolean updatedTask = taskService.updateTask(
+			boolean updatedTask = cli.getTaskService().updateTask(
 					id,
 					name,
 					description,

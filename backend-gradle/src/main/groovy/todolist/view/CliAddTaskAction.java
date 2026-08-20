@@ -1,5 +1,6 @@
 package todolist.view;
 
+import todolist.dto.TaskDTO;
 import todolist.model.TaskStatus;
 import todolist.services.TaskService;
 
@@ -46,8 +47,9 @@ public class CliAddTaskAction {
 			}
 			TaskStatus status = (optionStatus == 2) ? TaskStatus.DOING : (optionStatus == 3) ? TaskStatus.DONE : TaskStatus.TODO;
 			
-			TaskService taskService = new TaskService();
-			taskService.addTask(name, description, dateTimeFinished, priorityLevel, category, status);
+			//			TaskDTO newTask = new TaskDTO(name, description, dateTimeFinished, priorityLevel, category, status);
+			
+			cli.getTaskService().addTask(name, description, dateTimeFinished, priorityLevel, category, status);
 			
 			System.out.println("+================================================+");
 			System.out.println("Terafa adicionada com sucesso!");

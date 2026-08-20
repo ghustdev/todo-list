@@ -4,6 +4,8 @@ Backend do sistema de gerenciamento de tarefas, desenvolvido em Java puro com ar
 
 ## Arquitetura
 
+![img.png](assets/img.png)
+
 O backend segue o padrão MVC (Model-View-Controller) com uma camada adicional de Repository para separação de responsabilidades:
 
 ### 📦 Model (Modelo de Dados)

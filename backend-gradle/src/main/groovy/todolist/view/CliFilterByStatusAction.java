@@ -2,15 +2,12 @@ package todolist.view;
 
 import todolist.model.Task;
 import todolist.model.TaskStatus;
-import todolist.services.TaskService;
 
 import java.util.List;
 
-public class CliListPerStatusAction {
+public class CliFilterByStatusAction {
 	static void cliListPerStatus(Cli cli) {
 		try {
-			TaskService taskService = new TaskService();
-			
 			System.out.println("+================================================+");
 			System.out.println("|           Listar Tarefas por Status            |");
 			System.out.println("+================================================+");
@@ -22,7 +19,7 @@ public class CliListPerStatusAction {
 			}
 			TaskStatus status = (optionStatus == 2) ? TaskStatus.DOING : (optionStatus == 3) ? TaskStatus.DONE : TaskStatus.TODO;
 			
-			List<Task> tasks = taskService.listTasksPerStatus(status);
+			List<Task> tasks = cli.getTaskService().filterTasksByStatus(status);
 			
 			if (tasks == null || tasks.isEmpty()) {
 				System.out.println("Nenhuma tarefa encontrada para esse status");
