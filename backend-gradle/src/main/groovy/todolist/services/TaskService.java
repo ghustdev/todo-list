@@ -104,6 +104,7 @@ public class TaskService {
 	
 	public boolean deleteTask(int id) {
 		List<Task> listTasks = repository.getTasks();
+		if (listTasks == null) return false;
 		
 		boolean removedId = listTasks.removeIf(t -> t.getId() == id);
 		
@@ -112,5 +113,42 @@ public class TaskService {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean updateTaskStatus(int id, TaskStatus newStatus) {
+		List<Task> listTasks = repository.getTasks();
+		if (listTasks == null) return false;
+		
+		for (int i = 0; i < listTasks.size(); i++) {
+			Task task = listTasks.get(i);
+			if (task.getId() == id) {
+				Task updatedTask = new Task(
+						task.getId(),
+						task.getName(),
+						task.getDescription(),
+						task.getDateTimeFinished(),
+						task.getPriorityLevel(),
+						task.getCategory(),
+						newStatus
+				);
+				listTasks.set(i, updatedTask);
+				repository.saveTask(listTasks);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public List<Task> searchTasksByTerm(String term) {
+		List<Task> listTasks = repository.getTasks();
+		if (listTasks == null) return java.util.Collections.emptyList();
+		if (term == null || term.trim().isEmpty()) {
+			return listTasks;
+		}
+		String lowerTerm = term.toLowerCase().trim();
+		return listTasks.stream()
+				.filter(task -> (task.getName() != null && task.getName().toLowerCase().contains(lowerTerm)) ||
+						(task.getDescription() != null && task.getDescription().toLowerCase().contains(lowerTerm)))
+				.collect(Collectors.toList());
 	}
 }
